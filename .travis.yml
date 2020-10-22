@@ -5,5 +5,8 @@ git:
   depth: false  #Disabilitiamo lo shallow clone (cloniamo per gli ultimi N commit)
   autocrlf: input
 
+install: true
+
+# List di script
 script:
   - ./gradlew check
