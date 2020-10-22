@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="PluginTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2020-10-22T13:25:31" hostname="DESKTOP-1EE2I79" time="1.858">
+  <properties/>
+  <testcase name="run the greet task" classname="PluginTest" time="0.036"/>
+  <testcase name="print an hello message" classname="PluginTest" time="0.01"/>
+  <testcase name="default configuration should" classname="PluginTest" time="35.496"/>
+  <testcase name="run the greet task" classname="PluginTest" time="0.003"/>
+  <testcase name="print an hello message" classname="PluginTest" time="0.004"/>
+  <testcase name="a message in Italian" classname="PluginTest" time="1.8"/>
+  <testcase name="running the plugin with" classname="PluginTest" time="37.348"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
