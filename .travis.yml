@@ -16,7 +16,7 @@ arch:
 
 env:
   global:
-    - GRAVIS_REPO = "https://github.com/pagno4/CI.git"
+    - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
     - GRAVIS="$HOME/gravis"
     - JDK="adopt@1.11"
 
