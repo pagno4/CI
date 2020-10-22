@@ -4,3 +4,6 @@ language: java
 git:
   depth: false  #Disabilitiamo lo shallow clone (cloniamo per gli ultimi N commit)
   autocrlf: input
+
+script:
+  - ./gradlew check
