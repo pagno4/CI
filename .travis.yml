@@ -5,6 +5,10 @@ git:
   depth: false  #Disabilitiamo lo shallow clone (cloniamo per gli ultimi N commit)
   autocrlf: input
 
+os:
+  - linux
+  - osx
+
 install: true
 
 # List di script
