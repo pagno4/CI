@@ -8,6 +8,7 @@ git:
 os:
   - linux
   - osx
+  - windows
 
 install: true
 
