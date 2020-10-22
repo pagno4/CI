@@ -1,0 +1,4 @@
+--reporter=plain
+--color
+--reporter=plain,output=D:\1-UNI_Cesena\Cesena\Materie\LaboratorioSistemiSW\CI\build\reports\ktlint\ktlintTestSourceSetCheck\ktlintTestSourceSetCheck.txt
+"src\\test\\kotlin\\PluginTest.kt"

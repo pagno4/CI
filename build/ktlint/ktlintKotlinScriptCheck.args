@@ -1,0 +1,5 @@
+--reporter=plain
+--color
+--reporter=plain,output=D:\1-UNI_Cesena\Cesena\Materie\LaboratorioSistemiSW\CI\build\reports\ktlint\ktlintKotlinScriptCheck\ktlintKotlinScriptCheck.txt
+"build.gradle.kts"
+"settings.gradle.kts"
