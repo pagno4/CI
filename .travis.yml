@@ -10,8 +10,22 @@ os:
   - osx
   - windows
 
+arch:
+  - amd64
+  - arm64
+
+env:
+  global:
+    - GRAVIS_REPO = "https://github.com/pagno4/CI.git"
+    - GRAVIS="$HOME/gravis"
+    - JDK="adopt@1.11"
+
+before_install:
+  - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
+  - souce $GRAVIS/install-jdk
+
 install: true
 
 # List di script
 script:
-  - ./gradlew check
+  - travis_retry ./gradlew check
