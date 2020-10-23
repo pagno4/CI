@@ -31,6 +31,7 @@ env: # Variabili d' ambiente
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
     - GRAVIS="$HOME/gravis"
+    - TERM="dumb" # Info per terminale
   matrix:
     - *reference_jdk
     - JDK="adopt@1.8"
@@ -39,7 +40,10 @@ env: # Variabili d' ambiente
     - JDK="adopt-openj9@1.8"
     - JDK="adopt-openj9@1.14"
 
-stages: # Stage da eseguire  #(prima viene eseguito check poi test??)
+# Stage da eseguire
+# Prima viene eseguito compile, poi kotlin style check, complete .... , ...
+# Mi permette di suddividere delle fasi tra job (vedi esecuzione job su Travis)
+stages:
   - Compile
   - Kotlin Style Check
   - Complete Check
@@ -75,7 +79,7 @@ jobs:
   include:
     - <<: *reference_machine
       stage: Compile
-      script: ./gradlew compile --parallel
+      script: ./gradlew compileKotlin --parallel
 
       # Creazione di un Workspaces (salviamo delle info)
       # Per esempio le cache di gradle
