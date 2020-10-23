@@ -1,24 +1,64 @@
-language: java
+# Creiamo una nostra chiave - # Quello che inizia con & è un puntatore (poi lo possiamo usare ovunque nel file). Al puntatore gli diamo un valore
+_references_os: &references_os linux
 
+_references_arch: &references_arch amd64
 
-git:
-  depth: false  #Disabilitiamo lo shallow clone (cloniamo per gli ultimi N commit)
+_references_jdk: &references_jdk JDK="adopt@1.11"
+
+language: java  # Linguaggio
+
+git: # operazioni su git
+  depth: false  # Disabilitiamo lo shallow clone (cloniamo per gli ultimi N commit)
   autocrlf: input
 
-os:
-  - linux
+os: # Esecuzione OS
+  - *references_os
   - osx
   - windows
 
-arch:
-  - amd64
+arch: # Architetture utilizzate
+  - *references_arch
   - arm64
 
-env:
+dist: focal
+
+env: # Variabili d' ambiente
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
     - GRAVIS="$HOME/gravis"
-    - JDK="adopt@1.11"
+
+    matrix:
+      - *references_jdk
+      - JDK=""adopt@1.8"
+      - JDK=""adopt@1.14"
+
+stages: # Stage da eseguire  #(prima viene eseguito check poi test??)
+  - check
+  - test
+
+# Creo un 'puntatore' più complesso
+_reference_machine: &reference_machine
+  arch: *references_arch
+  os: *references_os
+  env: *references_jdk
+
+jobs:
+
+  exclude: # Escludiamo l' esecuzione dei job con questa combinazione
+    - arch: arm64
+      env: JDK="adopt-openJ9@1.8"
+    - arch: arm64
+      env: JDK="adopt-openJ9@1.14"
+
+    # Includo il puntatore _reference_machine (uso l' operatore <<)
+    - <<: *reference_machine
+      stage: test
+
+  include:
+    - <<: *reference_machine
+      stage: check
+      scrpit:
+        - travis_retry ./gradlew check
 
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
@@ -26,6 +66,5 @@ before_install:
 
 install: true
 
-# List di script
-script:
+script: # List di script
   - travis_retry ./gradlew check
