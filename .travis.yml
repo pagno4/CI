@@ -1,26 +1,26 @@
 # Creiamo una nostra chiave - # Quello che inizia con & è un puntatore (poi lo possiamo usare ovunque nel file). Al puntatore gli diamo un valore
-_references_os: &references_os
+_reference_os: &reference_os
   linux
 
-_references_arch: &references_arch
+_reference_arch: &reference_arch
   amd64
 
-_references_jdk: &references_jdk
+_reference_jdk: &reference_jdk
   JDK="adopt@1.11"
 
-language: java  # Linguaggio
+language: minimal  # Linguaggio
 
 git: # operazioni su git
   depth: false  # Disabilitiamo lo shallow clone (cloniamo per gli ultimi N commit)
   autocrlf: input
 
 os: # Esecuzione OS
-  - *references_os
+  - *reference_os
   - osx
   - windows
 
 arch: # Architetture utilizzate
-  - *references_arch
+  - *reference_arch
   - arm64
 
 dist: focal
@@ -29,21 +29,25 @@ env: # Variabili d' ambiente
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
     - GRAVIS="$HOME/gravis"
-
-    matrix:
-      - *references_jdk
-      - JDK=""adopt@1.8"
-      - JDK=""adopt@1.14"
+  matrix:
+    - *reference_jdk
+    - JDK="adopt@1.8"
+    - JDK="adopt@1.14"
+    - JDK="adopt-openj9@1.11"
+    - JDK="adopt-openj9@1.8"
+    - JDK="adopt-openj9@1.14"
 
 stages: # Stage da eseguire  #(prima viene eseguito check poi test??)
-  - check
+  - Compile
+  - Kotlin Style Check
+  - Complete Check
   - test
 
 # Creo un 'puntatore' più complesso
 _reference_machine: &reference_machine
-  arch: *references_arch
-  os: *references_os
-  env: *references_jdk
+  arch: *reference_arch
+  os: *reference_os
+  env: *reference_jdk
 
 jobs:
 
@@ -59,15 +63,21 @@ jobs:
 
   include:
     - <<: *reference_machine
-      stage: check
-      scrpit:
+      stage: Compile
+      script: ./gradlew compile --parallel
+    - <<: *reference_machine
+      stage: Kotlin Style Check
+      script: ./gradlew detekt ktlintCheck --parallel
+    - <<: *reference_machine
+      stage: Complete Check
+      script:
         - travis_retry ./gradlew check
 
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
   - souce $GRAVIS/install-jdk
 
-install: true
+install: "true"
 
 script: # List di script
   - travis_retry ./gradlew check
