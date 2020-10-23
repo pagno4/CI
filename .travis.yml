@@ -1,3 +1,5 @@
+if: repo != head_repo
+
 # Creiamo una nostra chiave
 # Quello che inizia con & è un puntatore (poi lo possiamo usare ovunque nel file). Al puntatore gli diamo un valore
 # La creazione delle chiavi prende il nome di Ancor
@@ -48,9 +50,11 @@ stages:
   - Compile
   - Kotlin Style Check
   - Complete Check
-  - Test
+  - name: Test
+    if: 'commit_message !~ /\[\s*skip(?: |-|\.)test\s*\].*/'
+
   - name: Delivery
-    if: repo = pagno4/CI
+    if: repo = pagno4/CI # Conditional stage
 
 # Creo un 'puntatore' più complesso
 _reference_machine: &reference_machine
