@@ -1,9 +1,12 @@
 # Creiamo una nostra chiave - # Quello che inizia con & è un puntatore (poi lo possiamo usare ovunque nel file). Al puntatore gli diamo un valore
-_references_os: &references_os linux
+_references_os: &references_os
+  linux
 
-_references_arch: &references_arch amd64
+_references_arch: &references_arch
+  amd64
 
-_references_jdk: &references_jdk JDK="adopt@1.11"
+_references_jdk: &references_jdk
+  JDK="adopt@1.11"
 
 language: java  # Linguaggio
 
