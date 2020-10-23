@@ -40,6 +40,7 @@ env: # Variabili d' ambiente
     - JDK="adopt-openj9@1.8"
     - JDK="adopt-openj9@1.14"
 
+
 # Stage da eseguire
 # Prima viene eseguito compile, poi kotlin style check, complete .... , ...
 # Mi permette di suddividere delle fasi tra job (vedi esecuzione job su Travis)
@@ -47,7 +48,9 @@ stages:
   - Compile
   - Kotlin Style Check
   - Complete Check
-  - test
+  - Test
+  - name: Delivery
+    if: repo = pagno4/CI
 
 # Creo un 'puntatore' più complesso
 _reference_machine: &reference_machine
@@ -73,7 +76,7 @@ jobs:
 
     # Includo il puntatore _reference_machine (uso l' operatore <<)
     - <<: *reference_machine
-      stage: test
+      stage: Test
 
   # Job inclusi
   include:
@@ -100,6 +103,9 @@ jobs:
       <<: *import_workspace
       script:
         - travis_retry ./gradlew check
+
+    - stage: Delivery
+      script: "true"
 
 
 # Se non si specifica niente i job fanno
