@@ -1,4 +1,6 @@
-# Creiamo una nostra chiave - # Quello che inizia con & è un puntatore (poi lo possiamo usare ovunque nel file). Al puntatore gli diamo un valore
+# Creiamo una nostra chiave
+# Quello che inizia con & è un puntatore (poi lo possiamo usare ovunque nel file). Al puntatore gli diamo un valore
+# La creazione delle chiavi prende il nome di Ancor
 _reference_os: &reference_os
   linux
 
@@ -49,8 +51,16 @@ _reference_machine: &reference_machine
   os: *reference_os
   env: *reference_jdk
 
+_workspace_name: &workspace_name
+  compile_env
+
+_import_workspace: &import_workspace
+  workspaces:
+    use: *workspace_name
+
 jobs:
 
+  # Job esclusi
   exclude: # Escludiamo l' esecuzione dei job con questa combinazione
     - arch: arm64
       env: JDK="adopt-openJ9@1.8"
@@ -61,21 +71,34 @@ jobs:
     - <<: *reference_machine
       stage: test
 
+  # Job inclusi
   include:
     - <<: *reference_machine
       stage: Compile
       script: ./gradlew compile --parallel
+
+      # Creazione di un Workspaces (salviamo delle info)
+      # Per esempio le cache di gradle
+      workspaces:
+        create: *workspace_name
+        paths:
+          - "$TRAVIS_BUILD_DIR"
+          - "$HOME/.gradle"
+
     - <<: *reference_machine
       stage: Kotlin Style Check
+      <<: *import_workspace
       script: ./gradlew detekt ktlintCheck --parallel
+
     - <<: *reference_machine
       stage: Complete Check
+      <<: *import_workspace
       script:
         - travis_retry ./gradlew check
 
 before_install:
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
-  - souce $GRAVIS/install-jdk
+  - source $GRAVIS/install-jdk
 
 install: "true"
 
